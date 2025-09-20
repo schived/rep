@@ -8,7 +8,40 @@
 		<script>
 			function ready(){
 				const f=function(){
-					alert('asd');
+					let params=new URLSearchParams(document.location.search);
+					let getparams="?";
+					for(let key of params.keys){
+						switch(key){
+							case"ipv4":
+							case"ipv6":
+							case"domain":
+							case"port":
+								continue;
+							default:
+								getparams+=key+"="+params.get(key);
+						}
+					}
+					let ipv4=params.get("ipv4");
+					let ipv6=params.get("ipv6");
+					let domain=params.get("domain");
+					let port=params.get("port");
+					let portPart="";
+					if(port!==null){
+						portPart=":"+port;
+					}
+					let getparamPart="";
+					if(getparams!=="?"){
+						getparamPart=getparams;
+					}
+					if(ipv4!==null){
+						window.location.replace(ipv4+port+getparamPart);
+					}else if(ipv6!==null){
+						window.location.replace(ipv6+port+getparamPart);
+					}else if(domain!==null){
+						window.location.replace(domain+port+getparamPart);
+					}else{
+						alert("failed redirect");
+					}
 				};
 				if(document.readyState!=='loading'){
 					f();
