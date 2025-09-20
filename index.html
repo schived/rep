@@ -4,18 +4,19 @@
 		<meta charset="utf-8">
 		<title>redirect</title>
 	</head>
-	<body>
+	<body style="background-color:#333;">
 		<script>
 			function ready(){
 				const f=function(){
 					let params=new URLSearchParams(document.location.search);
 					let getparams="?";
-					for(let key of params.keys){
+					for(let key of params.keys()){
 						switch(key){
 							case"ipv4":
 							case"ipv6":
 							case"domain":
 							case"port":
+							case"location":
 								continue;
 							default:
 								getparams+=key+"="+params.get(key);
@@ -25,6 +26,7 @@
 					let ipv6=params.get("ipv6");
 					let domain=params.get("domain");
 					let port=params.get("port");
+					let location=params.get("location");
 					let portPart="";
 					if(port!==null){
 						portPart=":"+port;
@@ -33,12 +35,17 @@
 					if(getparams!=="?"){
 						getparamPart=getparams;
 					}
+					let locationPart="";
+					if(location!==null){
+						locationPart=location;
+					}
+					console.log([ipv4,ipv6,domain,port,location,getparamPart]);
 					if(ipv4!==null){
-						window.location.replace(ipv4+port+getparamPart);
+						window.location.replace("https://"+ipv4+portPart+locationPart+getparamPart);
 					}else if(ipv6!==null){
-						window.location.replace(ipv6+port+getparamPart);
+						window.location.replace("https://["+ipv6+"]"+portPart+locationPart+getparamPart);
 					}else if(domain!==null){
-						window.location.replace(domain+port+getparamPart);
+						window.location.replace("https://"+domain+portPart+locationPart+getparamPart);
 					}else{
 						alert("failed redirect");
 					}
